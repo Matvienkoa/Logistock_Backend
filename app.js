@@ -1,0 +1,31 @@
+const express = require('express');
+const path = require('path');
+
+//Sécurity
+// const helmet = require('helmet');
+// const hpp = require("hpp");
+// const rateLimit = require("./middleware/limiter");
+
+//Database
+const db = require('./config/config');
+//Test connexion DB
+db.authenticate()
+    .then(() => console.log('Database connected'))
+    .catch(err => console.log('Error: ' + err))
+
+const app = express();
+
+app.use(express.json());
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use('/api/spdev/auth', require('./routes/auth'));
+app.use('/api/spdev/user', require('./routes/users'));
+app.use('/api/spdev/product', require('./routes/products'));
+app.use('/api/spdev/stock', require('./routes/stocks'));
+app.use('/api/spdev/warehouse', require('./routes/warehouses'));
+app.use('/api/spdev/store', require('./routes/stores'));
+app.use('/api/spdev/order', require('./routes/orders'));
+app.use('/api/spdev/orderdetails', require('./routes/orderDetails'));
+
+module.exports = app;
