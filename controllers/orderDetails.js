@@ -15,14 +15,12 @@ exports.createOrderDetails = (req, res) => {
     .catch(error => res.status(400).json({ error }));    
 };
 
-// Edit OrderDetails
+// Edit Quantity
 exports.editOrderDetails = async (req, res) => {
     const orderdetail = await models.OrderDetails.findOne({
         where: { id: req.params.id }
     })
     await orderdetail.update({
-        orderId: req.body.orderId,
-        productId: req.body.productId,
         quantity: req.body.quantity
     })
     .then((orderdetail) => res.status(201).json(orderdetail))

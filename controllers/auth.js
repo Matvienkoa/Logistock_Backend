@@ -7,7 +7,7 @@ const emailValidator = require('email-validator');
 // Create Account
 exports.signup = (req, res) => {
     // Empty Inputs
-    if (req.body.email === "" || req.body.password === "" || req.body.password2 === "" || req.body.role === "" || req.body.roleNumber === "") {
+    if (req.body.email === "" || req.body.login === "" || req.body.password === "" || req.body.password2 === "" || req.body.role === "" || req.body.roleNumber === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
     }
     // Bad Schema Mail
@@ -23,7 +23,7 @@ exports.signup = (req, res) => {
         return res.status(400).json({ message: "Les mots de passe ne sont pas identiques" });
     }
     models.Users.findOne({
-        where: { email: req.body.email}
+        where: { login: req.body.login}
     })
     .then((user) => {
         if(!user) {
@@ -31,6 +31,7 @@ exports.signup = (req, res) => {
                 .then(hash => {
                     models.Users.create({
                         email: req.body.email,
+                        login: req.body.login,
                         password: hash,
                         role: req.body.role,
                         roleNumber: req.body.roleNumber
@@ -40,7 +41,7 @@ exports.signup = (req, res) => {
                 })
                 .catch(error => res.status(500).json({ error }));
         } else {
-            return res.status(400).json({ message: "Cet email existe déjà, merci d'en choisir un autre"});
+            return res.status(400).json({ message: "Cet identifiant existe déjà, merci d'en choisir un autre"});
         }
     })
     
@@ -49,14 +50,10 @@ exports.signup = (req, res) => {
 // Login
 exports.login = (req, res) => {
     // Empty Inputs
-    if (req.body.email === "" || req.body.password === "") {
+    if (req.body.password === "" || req.body.login === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
     }
-    // Bad Schema Mail
-    if (!emailValidator.validate(req.body.email)) {
-        return res.status(400).json({ message: "Format d'email invalide" });
-    }
-    models.Users.findOne({where: { email: req.body.email } })
+    models.Users.findOne({where: { login: req.body.login } })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ message: 'Utilisateur non trouvé' });

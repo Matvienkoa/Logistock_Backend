@@ -1,13 +1,26 @@
 const models = require('../models/Index');
 
 // Create Warehouse
-exports.createWarehouse = (req, res) => {
+exports.createWarehouse = async (req, res) => {
     // Empty Inputs
-    if (req.body.number === "") {
-        return res.status(400).json({ message: "Merci de renseigner un numéro d'identifiant d'entrepôt"});
+    if (req.body.number === "" || req.body.name === "") {
+        return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
+    }
+    const warehouseNumber = await models.Warehouses.findOne({
+        where: { number: req.body.number }
+    })
+    const warehouseName = await models.Warehouses.findOne({
+        where: { name: req.body.name }
+    })
+    if (warehouseNumber) {
+        return res.status(400).json({ message: "Ce numéro d'identifiant existe déjà, merci d'en choisir un autre" });
+    }
+    if (warehouseName) {
+        return res.status(400).json({ message: "Ce nom existe déjà, merci d'en choisir un autre" });
     }
     models.Warehouses.create({
         number: req.body.number,
+        name: req.body.name,
         adress: req.body.adress,
         adress2: req.body.adress2,
         postalCode: req.body.postalCode,
@@ -19,11 +32,15 @@ exports.createWarehouse = (req, res) => {
 
 // Edit Warehouse
 exports.editWarehouse = async (req, res) => {
+    if (req.body.number === "" || req.body.name === "") {
+        return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires" });
+    }
     const warehouse = await models.Warehouses.findOne({
         where: { id: req.params.id }
     })
     await warehouse.update({
         number: req.body.number,
+        name: req.body.name,
         adress: req.body.adress,
         adress2: req.body.adress2,
         postalCode: req.body.postalCode,

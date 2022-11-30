@@ -6,6 +6,10 @@ const Users = db.define('users', {
         type: Sequelize.STRING,
         unique: 'email'
     },
+    login: {
+        type: Sequelize.STRING,
+        unique: 'login'
+    },
     password: {
         type: Sequelize.STRING
     },

@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize');
 const db = require('../config/config');
 
-const Warehouses = db.define('warehouses', {
+const Suppliers = db.define('suppliers', {
     name: {
-        type: Sequelize.STRING,
-        unique: 'name'
+        type: Sequelize.STRING
     },
     adress: {
         type: Sequelize.STRING
@@ -15,13 +14,15 @@ const Warehouses = db.define('warehouses', {
     postalCode: {
         type: Sequelize.STRING
     },
+    tel: {
+        type: Sequelize.STRING
+    },
     city: {
         type: Sequelize.STRING
     },
-    number: {
-        type: Sequelize.STRING,
-        unique: 'number'
-    }
+    mail: {
+        type: Sequelize.STRING
+    },
 });
 
-module.exports = Warehouses;
+module.exports = Suppliers;

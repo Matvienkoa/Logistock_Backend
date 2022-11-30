@@ -4,22 +4,23 @@ const fs = require('fs');
 // Create Product
 exports.createProduct = (req, res) => {
     // Empty Inputs
-    if (req.body.reference === "" || req.body.title === "" || req.body.description === "") {
+    if (req.body.reference === "" || req.body.name === "" || req.body.description === "" || req.body.category === "" || req.body.tva === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
     }
     models.Products.create({
         reference: req.body.reference,
-        title: req.body.title,
+        name: req.body.name,
         description: req.body.description,
         category: req.body.category,
         subCategory: req.body.subCategory,
         image: req.file ? 
         `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         :null,
-        supplier: req.body.supplier,
         packaging: req.body.packaging,
         leadTime: req.body.leadTime,
-        tva: req.body.tva
+        tva: req.body.tva,
+        size: req.body.size,
+        supplierId: req.body.supplierId,
     })
     .then((product) => res.status(201).json(product))
     .catch((error) => {
@@ -44,8 +45,8 @@ exports.createProduct = (req, res) => {
 // Edit Product
 exports.editProduct = async (req, res) => {
     // Empty Inputs
-    if (req.body.reference === "" || req.body.title === "" || req.body.description === "") {
-        return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
+    if (req.body.reference === "" || req.body.name === "" || req.body.description === "" || req.body.category === "" || req.body.tva === "") {
+        return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires" });
     }
     const product = await models.Products.findOne({
         where: { id: req.params.id }
@@ -64,22 +65,23 @@ exports.editProduct = async (req, res) => {
             )
         }
     }
-    await product.update({
-            reference: req.body.reference,
-            title: req.body.title,
-            description: req.body.description,
-            category: req.body.category,
-            subCategory: req.body.subCategory,
-            image: req.file ? 
-            `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-            :product.image,
-            supplier: req.body.supplier,
-            packaging: req.body.packaging,
-            leadTime: req.body.leadTime,
-            tva: req.body.tva
-        })
-        .then((product) => res.status(201).json(product))
-        .catch(error => res.status(400).json({ error }));
+    product.update({
+        reference: req.body.reference,
+        name: req.body.name,
+        description: req.body.description,
+        category: req.body.category,
+        subCategory: req.body.subCategory,
+        image: req.file ? 
+        `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        :product.image,
+        packaging: req.body.packaging,
+        leadTime: req.body.leadTime,
+        tva: req.body.tva,
+        size: req.body.size,
+        supplierId: req.body.supplierId,
+    })
+    .then((product) => res.status(201).json(product))
+    .catch(error => res.status(400).json({ error }));
 };
 
 // Delete Product
@@ -114,7 +116,7 @@ exports.getOneProduct = (req, res) => {
 // Get All Products
 exports.getAllProducts = (req, res) => {
     models.Products.findAll({
-        order: [['title', 'ASC']],
+        order: [['name', 'ASC']],
         include: [{model: models.Stocks}]
     })
     .then((products) => res.status(200).json(products))

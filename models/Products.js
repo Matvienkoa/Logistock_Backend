@@ -6,7 +6,7 @@ const Products = db.define('products', {
         type: Sequelize.STRING,
         unique: 'reference'
     },
-    title: {
+    name: {
         type: Sequelize.STRING
     },
     description: {
@@ -21,20 +21,20 @@ const Products = db.define('products', {
     image: {
         type: Sequelize.STRING
     },
-    supplier: {
+    packaging: {
         type: Sequelize.STRING
     },
-    packaging: {
-        type: Sequelize.INTEGER
-    },
     leadTime: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     tva: {
-        type: Sequelize.FLOAT
+        type: Sequelize.STRING
     },
     size: {
         type: Sequelize.STRING
+    },
+    supplierId: {
+        type: Sequelize.INTEGER
     },
 });
 

@@ -29,6 +29,25 @@ exports.editOrder = async (req, res) => {
     .catch(error => res.status(400).json({ error }));
 };
 
+// Confirm Order
+exports.confirmOrder = async (req, res) => {
+    const order = await models.Orders.findOne({
+        where: { id: req.params.id }
+    })
+    await order.update({
+        status: 'validated'
+    })
+    .then((order) => {
+        models.Orders.findOne({
+            where: { id: order.id }, include: [{ model: models.OrderDetails }]
+        })
+        .then((order) => {
+            res.status(201).json(order)
+        })
+    })
+    .catch(error => res.status(400).json({ error }));
+};
+
 // Delete Order
 exports.deleteOrder = (req, res) => {
     models.Orders.destroy({ where: { id: req.params.id }})
@@ -52,3 +71,41 @@ exports.getAllOrders = (req, res) => {
     .then((orders) => res.status(200).json(orders))
     .catch(error => res.status(400).json({ error }));
 };
+
+// Get Orders Pending
+exports.getOrdersPending = (req, res) => {
+    models.Orders.findAll({
+        where: { status: 'pending'},
+        order: [['createdAt', 'DESC']],
+        include: [{ model: models.OrderDetails }]
+    })
+        .then((orders) => res.status(200).json(orders))
+        .catch(error => res.status(400).json({ error }));
+};
+
+// Get Orders Validated
+exports.getOrdersValidated = (req, res) => {
+    models.Orders.findAll({
+        where: { status: 'validated' },
+        order: [['createdAt', 'DESC']],
+        include: [{ model: models.OrderDetails }]
+    })
+        .then((orders) => res.status(200).json(orders))
+        .catch(error => res.status(400).json({ error }));
+};
+
+// Check Quantity
+exports.checkQuantity = async (req, res) => {
+    let checkQuantity = [];
+    const order = await models.Orders.findOne({ where: { id: req.params.id }, include: [{ model: models.OrderDetails }] });
+    const productsInOrder = await order.orderDetails;
+    console.log(productsInOrder)
+    productsInOrder.forEach(detail => {
+        checkQuantity.push({
+            id: detail.productId,
+            quantity: detail.quantity
+        })
+    })
+    res.status(200).json(checkQuantity)
+}
+

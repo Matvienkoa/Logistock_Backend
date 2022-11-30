@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+require("dotenv").config()
 
 //Sécurity
 // const helmet = require('helmet');
@@ -15,12 +17,17 @@ db.authenticate()
 
 const app = express();
 
+app.use(cors({
+    origin: process.env.URL_ORIGIN
+}));
+
 app.use(express.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/spdev/auth', require('./routes/auth'));
 app.use('/api/spdev/user', require('./routes/users'));
+app.use('/api/spdev/supplier', require('./routes/suppliers'));
 app.use('/api/spdev/product', require('./routes/products'));
 app.use('/api/spdev/stock', require('./routes/stocks'));
 app.use('/api/spdev/warehouse', require('./routes/warehouses'));

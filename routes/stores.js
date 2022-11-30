@@ -5,6 +5,7 @@ const storeCtrl = require('../controllers/stores');
 router.post('/', storeCtrl.createStore);
 router.get('/', storeCtrl.getAllStores);
 router.get('/:id', storeCtrl.getOneStore);
+router.get('/number/:roleNumber', storeCtrl.getOneStoreByNumber);
 router.put('/:id', storeCtrl.editStore);
 router.delete('/:id', storeCtrl.deleteStore);
 

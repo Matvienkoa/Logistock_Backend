@@ -6,6 +6,10 @@ const Stores = db.define('stores', {
         type: Sequelize.STRING,
         unique: 'number'
     },
+    name: {
+        type: Sequelize.STRING,
+        unique: 'name'
+    },
     adress: {
         type: Sequelize.STRING
     },
