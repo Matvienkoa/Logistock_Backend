@@ -32,18 +32,13 @@ exports.editOrder = async (req, res) => {
 // Confirm Order
 exports.confirmOrder = async (req, res) => {
     const order = await models.Orders.findOne({
-        where: { id: req.params.id }
+        where: { id: req.params.id }, include: [{ model: models.OrderDetails }]
     })
     await order.update({
         status: 'validated'
     })
     .then((order) => {
-        models.Orders.findOne({
-            where: { id: order.id }, include: [{ model: models.OrderDetails }]
-        })
-        .then((order) => {
-            res.status(201).json(order)
-        })
+        res.status(201).json(order)
     })
     .catch(error => res.status(400).json({ error }));
 };

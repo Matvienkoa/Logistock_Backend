@@ -3,7 +3,8 @@ const db = require('../config/config');
 
 const Suppliers = db.define('suppliers', {
     name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: 'name'
     },
     adress: {
         type: Sequelize.STRING

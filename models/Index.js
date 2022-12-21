@@ -6,6 +6,7 @@ const Orders = require('./Orders');
 const OrderDetails = require('./OrderDetails');
 const Stocks = require('./Stocks');
 const Suppliers = require('./Suppliers');
+const Sales = require('./Sales');
 
 Stores.hasMany(Orders);
 Orders.hasMany(OrderDetails);
@@ -24,5 +25,6 @@ module.exports = {
     Orders,
     OrderDetails,
     Stocks,
-    Suppliers
+    Suppliers,
+    Sales
 }

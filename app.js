@@ -34,5 +34,6 @@ app.use('/api/spdev/warehouse', require('./routes/warehouses'));
 app.use('/api/spdev/store', require('./routes/stores'));
 app.use('/api/spdev/order', require('./routes/orders'));
 app.use('/api/spdev/orderdetails', require('./routes/orderDetails'));
+app.use('/api/spdev/sale', require('./routes/sales'));
 
 module.exports = app;

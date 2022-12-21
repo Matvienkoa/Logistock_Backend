@@ -36,6 +36,9 @@ const Products = db.define('products', {
     supplierId: {
         type: Sequelize.INTEGER
     },
+    onSale: {
+        type: Sequelize.STRING
+    }
 });
 
 module.exports = Products;

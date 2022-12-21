@@ -52,7 +52,7 @@ exports.updateStock = (req, res) => {
             let orderQuantity = req.body.quantity;
             let i = 0
             while (orderQuantity > 0) {
-                if (stocks[i].quantity >= orderQuantity) {
+                if (stocks[i].quantity > orderQuantity) {
                     console.log('assez de stock')
                     stocks[i].quantity -= orderQuantity
                     orderQuantity = 0
@@ -65,6 +65,12 @@ exports.updateStock = (req, res) => {
                         .then((newStock) => res.status(201).json(newStock))
                         .catch(error => res.status(400).json({ error }));
                     })
+                }
+                if (stocks[i].quantity === orderQuantity) {
+                    console.log('assez de stock')
+                    orderQuantity = 0
+                    console.log(stocks[i].quantity + 'nouveau stock' + orderQuantity + 'qty demandée')
+                    models.Stocks.destroy({ where: { id: stocks[i].id } })
                 }
                 if (stocks[i].quantity < orderQuantity) {
                     console.log('pas assez de stock')
@@ -104,3 +110,16 @@ exports.getAllStocks = (req, res) => {
     .then((stocks) => res.status(200).json(stocks))
     .catch(error => res.status(400).json({ error }));
 };
+
+// Get Market Value
+exports.getMarketValue = (req, res) => {
+    models.Stocks.findAll({ where : { productId: req.params.id}})
+    .then((stocks) => {
+        let amount = 0;
+        stocks.forEach((stock) => {
+            amount += (stock.buyingPrice * stock.quantity)
+        })
+        res.status(200).json(amount)
+    })
+    .catch(error => res.status(400).json({ error }));
+}

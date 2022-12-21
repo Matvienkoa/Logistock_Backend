@@ -8,5 +8,6 @@ router.get('/', stockCtrl.getAllStocks);
 router.get('/:id', stockCtrl.getOneStock);
 router.put('/:id', stockCtrl.editStock);
 router.post('/update/:productId', stockCtrl.updateStock);
+router.get('/marketvalue/:id', stockCtrl.getMarketValue);
 
 module.exports = router;
