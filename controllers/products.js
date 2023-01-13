@@ -4,7 +4,7 @@ const fs = require('fs');
 // Create Product
 exports.createProduct = (req, res) => {
     // Empty Inputs
-    if (req.body.reference === "" || req.body.name === "" || req.body.category === "" || req.body.tva === "" || req.body.packaging === "" || req.body.size === "" || req.body.onSale === "") {
+    if (req.body.reference === "" || req.body.name === "" || req.body.category === "" || req.body.tva === "" || req.body.packaging === "" || req.body.size === "" || req.body.leadTime === "" || req.body.onSale === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
     }
     models.Products.create({
@@ -46,7 +46,7 @@ exports.createProduct = (req, res) => {
 // Edit Product
 exports.editProduct = async (req, res) => {
     // Empty Inputs
-    if (req.body.reference === "" || req.body.name === "" || req.body.category === "" || req.body.tva === "" || req.body.packaging === "" || req.body.size === "") {
+    if (req.body.reference === "" || req.body.name === "" || req.body.category === "" || req.body.tva === "" || req.body.packaging === "" || req.body.size === "" || req.body.leadTime === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires" });
     }
     const product = await models.Products.findOne({
@@ -124,7 +124,7 @@ exports.deleteProduct = (req, res) => {
 
 // Get One Product
 exports.getOneProduct = (req, res) => {
-    models.Products.findOne({ where: { id: req.params.id }, include: [{model: models.Stocks}]})
+    models.Products.findOne({ where: { id: req.params.id }, include: [{model: models.Stocks}], order: [[{ model: models.Stocks}, 'dluo', 'ASC']] })
     .then((product) => res.status(200).json(product))
     .catch(error => res.status(400).json({ error }));
 };

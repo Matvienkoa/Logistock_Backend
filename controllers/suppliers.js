@@ -19,7 +19,8 @@ exports.createSupplier = async (req, res) => {
         postalCode: req.body.postalCode,
         city: req.body.city,
         tel: req.body.tel,
-        mail: req.body.mail
+        mail: req.body.mail,
+        contact: req.body.contact
     })
         .then((supplier) => res.status(201).json(supplier))
         .catch(error => res.status(400).json({ error }));
@@ -40,7 +41,8 @@ exports.editSupplier = (req, res) => {
             postalCode: req.body.postalCode,
             city: req.body.city,
             tel: req.body.tel,
-            mail: req.body.mail
+            mail: req.body.mail,
+            contact: req.body.contact
         })
         .then((supplier) => res.status(201).json(supplier))
         .catch(error => res.status(400).json({ error })); 

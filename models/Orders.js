@@ -10,6 +10,18 @@ const Orders = db.define('orders', {
     },
     status: {
         type: Sequelize.STRING
+    },
+    commentStore: {
+        type: Sequelize.STRING
+    },
+    commentWarehouse: {
+        type: Sequelize.STRING
+    },
+    applicant: {
+        type: Sequelize.STRING
+    },
+    billed: {
+        type: Sequelize.STRING
     }
 });
 

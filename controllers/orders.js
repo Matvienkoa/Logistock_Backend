@@ -4,12 +4,18 @@ const models = require('../models/Index');
 exports.createOrder = (req, res) => {
     // Empty Inputs
     if (req.body.storeId === "" || req.body.delivery === "" || req.body.status === "") {
-        return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
+        return res.status(400).json({ message: "Merci de sélectionner un mode de livraison"});
+    }
+    if (req.body.storeId === "" || req.body.applicant === "" || req.body.status === "") {
+        return res.status(400).json({ message: "Merci d'indiquer le demandeur" });
     }
     models.Orders.create({
         storeId: req.body.storeId,
         delivery: req.body.delivery,
-        status: req.body.status
+        status: req.body.status,
+        commentStore: req.body.commentStore,
+        applicant: req.body.applicant,
+        billed: 'no'
     })
     .then((order) => res.status(201).json(order))
     .catch(error => res.status(400).json({ error }));    
@@ -35,13 +41,28 @@ exports.confirmOrder = async (req, res) => {
         where: { id: req.params.id }, include: [{ model: models.OrderDetails }]
     })
     await order.update({
-        status: 'validated'
+        status: 'validated',
+        commentWarehouse: req.body.commentWarehouse
     })
     .then((order) => {
         res.status(201).json(order)
     })
     .catch(error => res.status(400).json({ error }));
 };
+
+// Confim Invoice
+exports.confirmInvoice = async (req, res) => {
+    const order = await models.Orders.findOne({
+        where: { id: req.params.id }, include: [{ model: models.OrderDetails }]
+    })
+    await order.update({
+        billed: 'yes'
+    })
+        .then((order) => {
+            res.status(201).json(order)
+        })
+        .catch(error => res.status(400).json({ error }));
+}
 
 // Delete Order
 exports.deleteOrder = (req, res) => {
@@ -84,6 +105,16 @@ exports.getOrdersValidated = (req, res) => {
         where: { status: 'validated' },
         order: [['createdAt', 'DESC']],
         include: [{ model: models.OrderDetails }]
+    })
+        .then((orders) => res.status(200).json(orders))
+        .catch(error => res.status(400).json({ error }));
+};
+
+// Get Orders To Bill
+exports.getOrdersToBill = (req, res) => {
+    models.Orders.findAll({
+        where: { billed: 'no', status: 'validated' },
+        order: [['createdAt', 'DESC']]
     })
         .then((orders) => res.status(200).json(orders))
         .catch(error => res.status(400).json({ error }));

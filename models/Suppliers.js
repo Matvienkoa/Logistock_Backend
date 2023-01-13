@@ -24,6 +24,9 @@ const Suppliers = db.define('suppliers', {
     mail: {
         type: Sequelize.STRING
     },
+    contact: {
+        type: Sequelize.STRING
+    },
 });
 
 module.exports = Suppliers;
