@@ -10,6 +10,9 @@ const OrderDetails = db.define('orderDetails', {
     },
     quantity: {
         type: Sequelize.INTEGER
+    },
+    requestQuantity: {
+        type: Sequelize.INTEGER
     }
 });
 

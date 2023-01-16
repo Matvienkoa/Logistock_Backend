@@ -53,10 +53,8 @@ exports.updateStock = (req, res) => {
             let i = 0
             while (orderQuantity > 0) {
                 if (stocks[i].quantity > orderQuantity) {
-                    console.log('assez de stock')
                     stocks[i].quantity -= orderQuantity
                     orderQuantity = 0
-                    console.log(stocks[i].quantity + 'nouveau stock' + orderQuantity + 'qty demandée')
                     models.Stocks.findOne({ where: { id: stocks[i].id } })
                     .then(stock => {
                         stock.update({
@@ -67,16 +65,12 @@ exports.updateStock = (req, res) => {
                     })
                 }
                 if (stocks[i].quantity === orderQuantity) {
-                    console.log('assez de stock')
                     orderQuantity = 0
-                    console.log(stocks[i].quantity + 'nouveau stock' + orderQuantity + 'qty demandée')
                     models.Stocks.destroy({ where: { id: stocks[i].id } })
                 }
                 if (stocks[i].quantity < orderQuantity) {
-                    console.log('pas assez de stock')
                     orderQuantity -= stocks[i].quantity
                     stocks[i].quantity = 0
-                    console.log(stocks[i].quantity + 'nouveau stock' + orderQuantity + 'qty demandée')
                     models.Stocks.destroy({ where: { id: stocks[i].id } })
                     i++
                 }

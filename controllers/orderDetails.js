@@ -9,7 +9,8 @@ exports.createOrderDetails = (req, res) => {
     models.OrderDetails.create({
         orderId: req.body.orderId,
         productId: req.body.productId,
-        quantity: req.body.quantity
+        quantity: req.body.quantity,
+        requestQuantity: req.body.quantity
     })
     .then((orderdetails) => res.status(201).json(orderdetails))
     .catch(error => res.status(400).json({ error }));    

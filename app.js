@@ -4,9 +4,9 @@ const cors = require('cors');
 require("dotenv").config()
 
 //Sécurity
-// const helmet = require('helmet');
-// const hpp = require("hpp");
-// const rateLimit = require("./middleware/limiter");
+const helmet = require('helmet');
+const hpp = require("hpp");
+const rateLimit = require("./middleware/limiter");
 
 //Database
 const db = require('./config/config');
@@ -23,9 +23,11 @@ app.use(cors({
 
 app.use(express.json());
 
+app.use(helmet());
+app.use(hpp());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/spdev/auth', require('./routes/auth'));
+app.use('/api/spdev/auth', rateLimit.authLimiter, require('./routes/auth'));
 app.use('/api/spdev/user', require('./routes/users'));
 app.use('/api/spdev/supplier', require('./routes/suppliers'));
 app.use('/api/spdev/product', require('./routes/products'));

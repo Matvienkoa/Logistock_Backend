@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { checkJWT, checkUser, checkAdmin } = require('../middleware/auth');
 const salesCtrl = require('../controllers/sales');
 
-router.post('/', salesCtrl.createSale);
-router.get('/', salesCtrl.getAllSales);
-router.get('/product/:id', salesCtrl.getAllSalesByProduct);
-router.post('/product/quantity/:id', salesCtrl.getQuantity);
+router.post('/', checkJWT, checkUser, salesCtrl.createSale);
+router.get('/', checkJWT, checkUser, checkAdmin, salesCtrl.getAllSales);
+router.get('/product/:id', checkJWT, checkUser, checkAdmin, salesCtrl.getAllSalesByProduct);
+router.post('/product/quantity/:id', checkJWT, checkUser, salesCtrl.getQuantity);
 
 
 module.exports = router;

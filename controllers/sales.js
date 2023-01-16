@@ -41,9 +41,7 @@ exports.getQuantity = (req, res) => {
         .then((sales) => {
             let quantity = 0;
             sales.forEach((sale) => {
-                console.log(req.body.store)
                 let saleDate = moment(sale.createdAt).format('LL')
-                console.log(saleDate)
                 let bodyStart = moment(req.body.start).format('LL')
                 let bodyEnd = moment(req.body.end).format('LL')
                 if(

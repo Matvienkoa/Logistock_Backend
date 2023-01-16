@@ -125,7 +125,6 @@ exports.checkQuantity = async (req, res) => {
     let checkQuantity = [];
     const order = await models.Orders.findOne({ where: { id: req.params.id }, include: [{ model: models.OrderDetails }] });
     const productsInOrder = await order.orderDetails;
-    console.log(productsInOrder)
     productsInOrder.forEach(detail => {
         checkQuantity.push({
             id: detail.productId,
