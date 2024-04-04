@@ -31,11 +31,13 @@ app.use('/api/spdev/auth', rateLimit.authLimiter, require('./routes/auth'));
 app.use('/api/spdev/user', require('./routes/users'));
 app.use('/api/spdev/supplier', require('./routes/suppliers'));
 app.use('/api/spdev/product', require('./routes/products'));
+app.use('/api/spdev/category', require('./routes/categories'));
 app.use('/api/spdev/stock', require('./routes/stocks'));
 app.use('/api/spdev/warehouse', require('./routes/warehouses'));
 app.use('/api/spdev/store', require('./routes/stores'));
 app.use('/api/spdev/order', require('./routes/orders'));
 app.use('/api/spdev/orderdetails', require('./routes/orderDetails'));
 app.use('/api/spdev/sale', require('./routes/sales'));
+app.use('/api/spdev/permission', require('./routes/permissions'));
 
 module.exports = app;

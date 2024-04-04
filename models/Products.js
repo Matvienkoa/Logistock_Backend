@@ -12,8 +12,8 @@ const Products = db.define('products', {
     description: {
         type: Sequelize.STRING
     },
-    category: {
-        type: Sequelize.STRING
+    categoryId: {
+        type: Sequelize.INTEGER
     },
     subCategory: {
         type: Sequelize.STRING
@@ -38,7 +38,10 @@ const Products = db.define('products', {
     },
     onSale: {
         type: Sequelize.STRING
-    }
+    },
+    sellingPrice: {
+        type: Sequelize.INTEGER
+    },
 });
 
 module.exports = Products;

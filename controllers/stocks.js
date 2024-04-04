@@ -110,10 +110,12 @@ exports.getMarketValue = (req, res) => {
     models.Stocks.findAll({ where : { productId: req.params.id}})
     .then((stocks) => {
         let amount = 0;
+        let qty = 0;
         stocks.forEach((stock) => {
             amount += (stock.buyingPrice * stock.quantity)
+            qty += stock.quantity
         })
-        res.status(200).json(amount)
+        res.status(200).json({amount, qty})
     })
     .catch(error => res.status(400).json({ error }));
 }

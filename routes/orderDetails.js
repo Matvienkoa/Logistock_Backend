@@ -8,5 +8,6 @@ router.get('/', checkJWT, checkUser, orderDetailsCtrl.getAllOrderDetails);
 router.get('/:id', checkJWT, checkUser, orderDetailsCtrl.getOneOrderDetails);
 router.put('/:id', checkJWT, checkUser, orderDetailsCtrl.editOrderDetails);
 router.delete('/:id', checkJWT, checkUser, orderDetailsCtrl.deleteOrderDetails);
+router.get('/purchase/:id', checkJWT, checkUser, orderDetailsCtrl.getPurchaseOrder);
 
 module.exports = router;

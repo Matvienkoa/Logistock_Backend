@@ -27,6 +27,15 @@ const Suppliers = db.define('suppliers', {
     contact: {
         type: Sequelize.STRING
     },
+    siret: {
+        type: Sequelize.STRING
+    },
+    number: {
+        type: Sequelize.STRING
+    },
+    comment: {
+        type: Sequelize.STRING
+    },
 });
 
 module.exports = Suppliers;

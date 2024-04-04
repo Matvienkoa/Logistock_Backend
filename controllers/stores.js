@@ -61,14 +61,14 @@ exports.deleteStore = (req, res) => {
 
 // Get One Store
 exports.getOneStore = (req, res) => {
-    models.Stores.findOne({ where: { id: req.params.id }, include: [{ model: models.Orders }], order: [[{ model: models.Orders}, 'createdAt', 'DESC' ]] })
+    models.Stores.findOne({ where: { id: req.params.id } })
     .then((store) => res.status(200).json(store))
     .catch(error => res.status(400).json({ error }));
 };
 
 // Get One Store by Number
 exports.getOneStoreByNumber = (req, res) => {
-    models.Stores.findOne({ where: { number: req.params.roleNumber }, include: [{ model: models.Orders }], order: [[{ model: models.Orders }, 'createdAt', 'DESC']] })
+    models.Stores.findOne({ where: { number: req.params.roleNumber } })
         .then((store) => res.status(200).json(store))
         .catch(error => res.status(400).json({ error }));
 };
@@ -76,8 +76,7 @@ exports.getOneStoreByNumber = (req, res) => {
 // Get All Stores
 exports.getAllStores = (req, res) => {
     models.Stores.findAll({
-        order: [['number', 'ASC']],
-        include: [{model: models.Orders}]
+        order: [['number', 'ASC']]
     })
     .then((stores) => res.status(200).json(stores))
     .catch(error => res.status(400).json({ error }));

@@ -5,7 +5,7 @@ const passwordValidator = require('../middleware/passwordValidator');
 const emailValidator = require('email-validator');
 
 // Create Account
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
     // Empty Inputs
     if (req.body.email === "" || req.body.login === "" || req.body.password === "" || req.body.password2 === "" || req.body.role === "" || req.body.roleNumber === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
@@ -21,6 +21,11 @@ exports.signup = (req, res) => {
     // Different Password
     if (req.body.password !== req.body.password2) {
         return res.status(400).json({ message: "Les mots de passe ne sont pas identiques" });
+    }
+    // Same mail
+    const userMail = await models.Users.findOne({ where: { email: req.body.email } })
+    if (userMail) {
+        return res.status(400).json({ message: "Cet email existe déjà!" });
     }
     models.Users.findOne({
         where: { login: req.body.login}
@@ -44,7 +49,6 @@ exports.signup = (req, res) => {
             return res.status(400).json({ message: "Cet identifiant existe déjà, merci d'en choisir un autre"});
         }
     })
-    
 };
 
 // Login

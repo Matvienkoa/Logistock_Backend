@@ -38,7 +38,7 @@ exports.changePassword = (req, res) => {
 }
 
 // Edit Profile
-exports.modifyUser = (req, res) => {
+exports.modifyUser = async (req, res) => {
     // Empty Inputs
     if (req.body.email === "" || req.body.login === "" || req.body.role === "" || req.body.roleNumber === "") {
         return res.status(400).json({ message: "Merci de renseigner tous les Champs Obligatoires"});
@@ -46,17 +46,23 @@ exports.modifyUser = (req, res) => {
     if (!emailValidator.validate(req.body.email)) {
         return res.status(400).json({ message: "Format d'email invalide" });
     }
-    models.Users.findOne({ where: { id: req.params.id } })
-        .then(user => {
-            user.update({
-                    email: req.body.email,
-                    login: req.body.login,
-                    role: req.body.role,
-                    roleNumber: req.body.roleNumber
-            })
-            .then(() => res.status(200).json({ message: 'Utilisateur modifié' }))
-            .catch(error => res.status(400).json({ error }));
-        });
+    const userLogin = await models.Users.findOne({ where: { login: req.body.login } })
+    if (userLogin && userLogin.id !== JSON.parse(req.params.id)) {
+        return res.status(400).json({ message: "Ce login existe déjà!" });
+    }
+    const userMail = await models.Users.findOne({ where: { email: req.body.email } })
+    if (userMail && userMail.id !== JSON.parse(req.params.id)) {
+        return res.status(400).json({ message: "Ce mail existe déjà!" });
+    }
+    const user = await models.Users.findOne({ where: { id: req.params.id } })
+        user.update({
+                email: req.body.email,
+                login: req.body.login,
+                role: req.body.role,
+                roleNumber: req.body.roleNumber
+        })
+        .then(() => res.status(200).json({ message: 'Utilisateur modifié' }))
+        .catch(error => res.status(400).json({ error }));
 };
 
 // Delete Profile
@@ -69,7 +75,7 @@ exports.deleteUser = (req, res) => {
 // Get Profiles
 exports.getAllUsers = (req, res) => {
     models.Users.findAll({
-        order: [['createdAt', 'DESC']]
+        order: [['roleNumber', 'ASC']]
     })
         .then((users) => { res.send(users)})
         .catch(error => res.status(400).json({ error }));

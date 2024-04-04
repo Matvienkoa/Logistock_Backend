@@ -12,9 +12,19 @@ const storage = multer.diskStorage({
     callback(null, './images');
   },
   filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    callback(null, Date.now() + '_' + name);
+    callback(null, 'productImage_' + Date.now());
   }
 });
 
-module.exports = multer({storage: storage}).single('image');
+module.exports = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/png" || file.mimetype == "image/gif" || file.mimetype == "image/webp") {
+        cb(null, true);
+      } else {
+        cb(null, false);
+        return cb(new Error('Only image'))
+      }
+    },
+    limits: { fileSize: 1048576 }
+  }).single('image');
